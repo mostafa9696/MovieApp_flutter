@@ -14,13 +14,9 @@ class MovieApiProvider {
   Future<ItemModel> fetchMovies(String type) async {
     final response = await client
         .get("http://api.themoviedb.org/3/movie/$type?api_key=$_apiKey");
-    print("test11" + response.body);
     if(response.statusCode == 200) {
-      print("test11 success" );
-      print("test11 success" + ItemModel.fromJson(json.decode(response.body)).results[0].title);
       return ItemModel.fromJson(json.decode(response.body));
     } else {
-      print("test11 failed");
       throw Exception("Failed to load data");
     }
   }

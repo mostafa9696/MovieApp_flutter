@@ -22,9 +22,10 @@ class _SlideShowViewState extends State<SlidShowView> {
       builder: (context, AsyncSnapshot<ItemModel> snapShot) {
         if (snapShot.hasData) {
           return buildContent(snapShot, context);
-        } else {
+        } else if (snapShot.hasError) {
           return Text(snapShot.error.toString());
         }
+        return Center(child: CircularProgressIndicator());
       },
     );
   }
