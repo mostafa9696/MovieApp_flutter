@@ -34,7 +34,7 @@ class MovieApiProvider {
   Future<MovieImageModel> fetchMovieImages(int movieId) async {
     final response = await client
         .get("http://api.themoviedb.org/3/movie/$movieId/images?api_key=$_apiKey");
-    if(response.body == 200) {
+    if(response.statusCode == 200) {
       return MovieImageModel.fromJson(json.decode(response.body));
     }  else {
       throw Exception('Failed to load post');

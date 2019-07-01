@@ -53,7 +53,6 @@ class _SlideShowViewState extends State<SlidShowView> {
               return InkWell(
                 onTap: () {
                   if (widget.onItemClick != null) {
-                    print("Movie click" + movieItem.title);
                     widget.onItemClick(movieItem.id);
                   } else {
                     debugPrint("No handle");

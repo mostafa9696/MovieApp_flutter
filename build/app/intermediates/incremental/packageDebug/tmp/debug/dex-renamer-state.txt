@@ -1,0 +1,4 @@
+#Mon Jul 01 18:37:43 EET 2019
+base.0=/Users/mhmd/Desktop/MovieApp_flutter/build/app/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex

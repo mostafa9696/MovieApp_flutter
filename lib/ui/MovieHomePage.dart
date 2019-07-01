@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app_flutter/constants/global.dart';
+import 'package:movie_app_flutter/db/DatabaseHelper.dart';
 import 'package:movie_app_flutter/ui/widget/MovieDetails.dart';
 import 'package:movie_app_flutter/ui/widget/MovieListView.dart';
 import 'package:movie_app_flutter/ui/widget/SlideShow.dart';
@@ -12,8 +13,19 @@ class MovieHomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<MovieHomePage> {
+
+  DatabaseHelper db;
+
+
+  @override
+  void initState() {
+    super.initState();
+    db = DatabaseHelper();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("Build MovieHomePage");
     return Scaffold(
       appBar: AppBar(
         title: Text("Movie App"),
@@ -40,11 +52,11 @@ class _HomePageState extends State<MovieHomePage> {
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
-                  _buildMyList(context),
+                  _buildPlayingNowList(context),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
-                  // _buildPopularList(context),
+                  // _buildFavList(context),
                 ],
               ),
             )),
@@ -52,8 +64,7 @@ class _HomePageState extends State<MovieHomePage> {
     );
   }
 
-  _buildMyList(BuildContext context) {
-    print("tq8");
+  _buildPlayingNowList(BuildContext context) {
     return Container(
       child: Column(
         children: <Widget>[
@@ -62,7 +73,7 @@ class _HomePageState extends State<MovieHomePage> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text("My Favorits",
+                  child: Text("Popular",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
@@ -87,14 +98,22 @@ class _HomePageState extends State<MovieHomePage> {
     );
   }
 
-  _buildPopularList(BuildContext context) {}
+  _buildFavList(BuildContext context) {
+    // todo create fav list
+  }
 
-  _navigateToMovieDetail(BuildContext context, int movieId) {
+  _navigateToMovieDetail(BuildContext context, int movieId) async{
+
+    bool isFav = await db.isMovieFav(movieId);
+    print("isFav " + isFav.toString());
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => MovieDetails(
                   movieId: movieId,
+                  isFav: isFav,
                 )));
   }
+
+
 }
