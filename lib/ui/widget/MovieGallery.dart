@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app_flutter/bloc/movie_images_bloc.dart';
+import 'package:movie_app_flutter/bloc/movie_list_bloc.dart';
 import 'package:movie_app_flutter/model/movie_image_model.dart';
 
 class MovieGallery extends StatefulWidget {
@@ -12,11 +13,21 @@ class MovieGallery extends StatefulWidget {
 }
 
 class _MovieGalleryState extends State<MovieGallery> {
+
+  MovieImagesBloc _listBloc;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _listBloc = MovieImagesBloc();
+  }
+
   @override
   Widget build(BuildContext context) {
-    movieImageBloc.fetchMovieImages(widget.movieId);
+    _listBloc.fetchMovieImages(widget.movieId);
     return StreamBuilder(
-      stream: movieImageBloc.movieImages,
+      stream: _listBloc.movieImages,
         builder: (context, AsyncSnapshot<MovieImageModel> snapshot) {
           if (snapshot.hasData) {
             return buildContent(snapshot, context);

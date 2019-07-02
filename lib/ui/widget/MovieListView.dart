@@ -13,17 +13,21 @@ class MovieListView extends StatefulWidget {
 }
 
 class _MovieListViewState extends State<MovieListView> {
+  MovieListBloc _listBloc;
+
   @override
   void initState() {
     super.initState();
-    movieListBloc.fetchMovieList(widget.type);
+    _listBloc = MovieListBloc();
+    _listBloc.fetchMovieList(widget.type);
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: movieListBloc.movieList,
+      stream: _listBloc.movieList,
       builder: (context, AsyncSnapshot<ItemModel> snapshot) {
+        print("In MovieListView");
         if (snapshot.hasData) {
           return buildContent(snapshot, context);
         } else if (snapshot.hasError) {

@@ -6,6 +6,7 @@ import 'package:movie_app_flutter/model/genre_model.dart';
 import 'package:movie_app_flutter/model/movie_detail_model.dart';
 import 'package:movie_app_flutter/model/production_country_model.dart';
 import 'package:movie_app_flutter/ui/widget/MovieGallery.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class MovieDetails extends StatefulWidget {
   MovieDetails({Key key, this.movieId, this.isFav}) : super(key: key);
@@ -17,7 +18,6 @@ class MovieDetails extends StatefulWidget {
 }
 
 class _MovieDetailPageState extends State<MovieDetails> {
-
   bool isExpanded = false;
   DatabaseHelper db;
 
@@ -30,6 +30,7 @@ class _MovieDetailPageState extends State<MovieDetails> {
   Widget build(BuildContext context) {
     movieDetailsBloc.fetchMovieDetails(widget.movieId);
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: _buildDetails(context),
     );
   }
@@ -54,6 +55,71 @@ class _MovieDetailPageState extends State<MovieDetails> {
           }),
     );
   }
+
+
+  Widget _buildCollapseContent(
+      AsyncSnapshot<MovieDetailModel> snapshoot, BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverAppBar(
+            expandedHeight: width / 2,
+            floating: false,
+            pinned: true,
+            centerTitle: false,
+            flexibleSpace: FlexibleSpaceBar(
+              title: (Text(
+                snapshoot.data.original_title,
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+              )),
+              background: _buildMovieImage(
+                  context, snapshoot.data.backdrop_path, snapshoot.data.id),
+            ),
+          )
+        ];
+      },
+      body: SingleChildScrollView(
+        child: Container(
+              color: Colors.black38,
+              padding: EdgeInsets.only(left: 30, right: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  _buildMovieName(context, snapshoot.data.original_title),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  _buildGenres(context, snapshoot.data.genres),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  _buildRating(context, snapshoot.data.vote_average),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  _buildMovieInfo(
+                    context,
+                    snapshoot.data.release_date,
+                    snapshoot.data.production_countries,
+                    snapshoot.data.runtime,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                  ),
+                  _buildMovieDescription(context, snapshoot.data.overview),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20),
+                  ),
+                  _buildScreenShoots(context, snapshoot.data.id)
+                ],
+              ),
+        ),
+      ),
+    );
+  }
+
 
   Widget _buildContent(
       AsyncSnapshot<MovieDetailModel> snapshoot, BuildContext context) {
@@ -114,8 +180,9 @@ class _MovieDetailPageState extends State<MovieDetails> {
         Container(
           width: width,
           height: width,
-          child: Image.network('https://image.tmdb.org/t/p/w780$backdrop_path',
-              fit: BoxFit.cover),
+          child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: 'https://image.tmdb.org/t/p/w780$backdrop_path', fit: BoxFit.cover,)
+          //Image.network('https://image.tmdb.org/t/p/w780$backdrop_path',
+            //  fit: BoxFit.cover),
         ),
         Positioned(
             right: 20.0,
@@ -211,8 +278,7 @@ class _MovieDetailPageState extends State<MovieDetails> {
           Expanded(
               child: buildMovieInfoItem(
                   "Country", countriesBuilder.toString() ?? "")),
-          Expanded(
-              child: buildMovieInfoItem("Length", "$runtime min")),
+          Expanded(child: buildMovieInfoItem("Length", "$runtime min")),
         ],
       ),
     );
@@ -313,11 +379,10 @@ class _MovieDetailPageState extends State<MovieDetails> {
     );
   }
 
-  void _toggleMovieFavorite(int movieId, String backdrop_path) async{
-    if(widget.isFav) {
+  void _toggleMovieFavorite(int movieId, String backdrop_path) async {
+    if (widget.isFav) {
       db.deleteFav(movieId);
     } else {
-
       int z = await db.addFav(movieId, backdrop_path);
     }
     setState(() {

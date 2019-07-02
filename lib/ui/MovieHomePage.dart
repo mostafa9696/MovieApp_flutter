@@ -14,9 +14,7 @@ class MovieHomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<MovieHomePage> {
-
   DatabaseHelper db;
-
 
   @override
   void initState() {
@@ -74,7 +72,7 @@ class _HomePageState extends State<MovieHomePage> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text("Popular",
+                  child: Text("Top rated movies",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
@@ -89,7 +87,7 @@ class _HomePageState extends State<MovieHomePage> {
             ),
           ),
           MovieListView(
-            type: MovieListType.popular,
+            type: MovieListType.topRated,
             onItemInteraction: (movieId) {
               _navigateToMovieDetail(context, movieId);
             },
@@ -132,10 +130,8 @@ class _HomePageState extends State<MovieHomePage> {
     );
   }
 
-  _navigateToMovieDetail(BuildContext context, int movieId) async{
-
+  _navigateToMovieDetail(BuildContext context, int movieId) async {
     bool isFav = await db.isMovieFav(movieId);
-    print("isFav " + isFav.toString());
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -144,6 +140,4 @@ class _HomePageState extends State<MovieHomePage> {
                   isFav: isFav,
                 )));
   }
-
-
 }
