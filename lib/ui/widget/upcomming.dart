@@ -9,9 +9,18 @@ class UpcommingMovies extends StatefulWidget {
 }
 
 class _UpcommingMoviesState extends State<UpcommingMovies> {
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    movieListBloc.fetchMovieList(MovieListType.upcoming);
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    movieListBloc.fetchMovieList(MovieListType.upcoming);
     return StreamBuilder(
       stream: movieListBloc.movieList,
       builder: (context, AsyncSnapshot<ItemModel> snapShot) {

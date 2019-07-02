@@ -13,10 +13,18 @@ class SlidShowView extends StatefulWidget {
   State createState() => _SlideShowViewState();
 }
 
+
 class _SlideShowViewState extends State<SlidShowView> {
+
+  @override
+  void initState() {
+    super.initState();
+    movieListBloc.fetchMovieList(MovieListType.nowPlaying);
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    movieListBloc.fetchMovieList(MovieListType.nowPlaying);
     return StreamBuilder(
       stream: movieListBloc.movieList,
       builder: (context, AsyncSnapshot<ItemModel> snapShot) {

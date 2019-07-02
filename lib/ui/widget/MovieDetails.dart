@@ -125,7 +125,7 @@ class _MovieDetailPageState extends State<MovieDetails> {
               translation: Offset(0.0, -0.5),
               child: FloatingActionButton(
                 onPressed: () {
-                  _toggleMovieFavorite(movieId);
+                  _toggleMovieFavorite(movieId, backdrop_path);
                 },
                 backgroundColor: Colors.white,
                 child: Icon(
@@ -313,11 +313,12 @@ class _MovieDetailPageState extends State<MovieDetails> {
     );
   }
 
-  void _toggleMovieFavorite(int movieId) async{
+  void _toggleMovieFavorite(int movieId, String backdrop_path) async{
     if(widget.isFav) {
       db.deleteFav(movieId);
     } else {
-      int z = await db.addFav(movieId);
+
+      int z = await db.addFav(movieId, backdrop_path);
     }
     setState(() {
       widget.isFav = !widget.isFav;

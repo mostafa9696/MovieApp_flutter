@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app_flutter/constants/global.dart';
 import 'package:movie_app_flutter/db/DatabaseHelper.dart';
+import 'package:movie_app_flutter/ui/widget/FavoritesMovieView.dart';
 import 'package:movie_app_flutter/ui/widget/MovieDetails.dart';
 import 'package:movie_app_flutter/ui/widget/MovieListView.dart';
 import 'package:movie_app_flutter/ui/widget/SlideShow.dart';
@@ -56,7 +57,7 @@ class _HomePageState extends State<MovieHomePage> {
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
-                  // _buildFavList(context),
+                  _buildFavList(context),
                 ],
               ),
             )),
@@ -64,7 +65,7 @@ class _HomePageState extends State<MovieHomePage> {
     );
   }
 
-  _buildPlayingNowList(BuildContext context) {
+  Widget _buildPlayingNowList(BuildContext context) {
     return Container(
       child: Column(
         children: <Widget>[
@@ -98,8 +99,37 @@ class _HomePageState extends State<MovieHomePage> {
     );
   }
 
-  _buildFavList(BuildContext context) {
-    // todo create fav list
+  Widget _buildFavList(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text("Favorite",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Muli")),
+                ),
+                Icon(
+                  Icons.arrow_forward,
+                  color: Colors.black,
+                )
+              ],
+            ),
+          ),
+          FavoritesMovieView(
+            onClickItem: (movieId) {
+              _navigateToMovieDetail(context, movieId);
+            },
+          )
+        ],
+      ),
+    );
   }
 
   _navigateToMovieDetail(BuildContext context, int movieId) async{

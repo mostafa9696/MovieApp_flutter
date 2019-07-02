@@ -14,11 +14,15 @@ class MovieListView extends StatefulWidget {
 
 class _MovieListViewState extends State<MovieListView> {
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     movieListBloc.fetchMovieList(widget.type);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return StreamBuilder(
       stream: movieListBloc.movieList,
-
       builder: (context, AsyncSnapshot<ItemModel> snapshot) {
         if (snapshot.hasData) {
           return buildContent(snapshot, context);
@@ -37,20 +41,20 @@ class _MovieListViewState extends State<MovieListView> {
     return Container(
       height: width / 1.75,
       margin: EdgeInsets.only(bottom: 10, top: 20),
-
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: snapshot.data.results.length,
           itemBuilder: (BuildContext context, int index) {
-            return InkWell(onTap: () {
-              if (widget.onItemInteraction != null) {
-                widget.onItemInteraction(snapshot.data.results[index].id);
-              } else {
-                debugPrint("Error click");
-              }
-            },
-              child: _buildItem(snapshot.data.results[index].poster_path, width / 4, index == 0)
-            );
+            return InkWell(
+                onTap: () {
+                  if (widget.onItemInteraction != null) {
+                    widget.onItemInteraction(snapshot.data.results[index].id);
+                  } else {
+                    debugPrint("Error click");
+                  }
+                },
+                child: _buildItem(snapshot.data.results[index].poster_path,
+                    width / 4, index == 0));
           }),
     );
   }
@@ -60,11 +64,14 @@ class _MovieListViewState extends State<MovieListView> {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 10.0,
       margin: EdgeInsets.only(left: isFirst ? 20 : 10, right: 10, bottom: 20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      child: Image.network('https://image.tmdb.org/t/p/w500$poster_path',
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      child: Image.network(
+        'https://image.tmdb.org/t/p/w500$poster_path',
         fit: BoxFit.cover,
         width: height * 4 / 3,
-        height: height / 2,),
+        height: height / 2,
+      ),
     );
   }
 }
