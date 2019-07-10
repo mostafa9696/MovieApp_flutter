@@ -87,6 +87,9 @@ class _MovieDetailPageState extends State<MovieDetails> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                  ),
                   _buildMovieName(context, snapshoot.data.original_title),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
